@@ -1,10 +1,5 @@
 #!/bin/python3.8
 
-"""
-This file is used to collect all arguments for the experiment, prepare the dataloaders, call the method for forgetting, and gather/log the metrics.
-Methods are executed in the strategies file.
-"""
-
 import random
 import os
 
@@ -220,10 +215,10 @@ for cls in config.ood_classes:
     ood_train_ds[cls] = []
 
     for img, label, clabel in classwise_test[cls]:
-        ood_valid_ds[cls].append((img, label, int(args.forget_class)))  # 分布外的数据默认为遗忘类
+        ood_valid_ds[cls].append((img, label, int(args.forget_class)))
 
     for img, label, clabel in classwise_train[cls]:
-        ood_train_ds[cls].append((img, label, int(args.forget_class)))  # 分布外的数据默认为遗忘类
+        ood_train_ds[cls].append((img, label, int(args.forget_class)))
 
     ood_valid_dl.append(DataLoader(ood_valid_ds[cls], batch_size))
     ood_train_dl.append(DataLoader(ood_train_ds[cls], batch_size))
