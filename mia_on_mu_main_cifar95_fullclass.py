@@ -170,16 +170,16 @@ if __name__ == '__main__':
     ood_valid_ds = {}
     ood_train_ds = {}
     # ood_valid_dl = []
-    ood_train_dl = []  # 存不同类别的分布外数据的dataloader
+    ood_train_dl = [] 
     for cls in config.ood_classes[:int(args.num_ood_dataset)]:
         ood_valid_ds[cls] = []
         ood_train_ds[cls] = []
 
         for img, label, clabel in classwise_test[cls]:
-            ood_valid_ds[cls].append((img, label, int(args.forget_class)))  # 分布外的数据默认为遗忘类
+            ood_valid_ds[cls].append((img, label, int(args.forget_class)))
 
         for img, label, clabel in classwise_train[cls]:
-            ood_train_ds[cls].append((img, label, int(args.forget_class)))  # 分布外的数据默认为遗忘类
+            ood_train_ds[cls].append((img, label, int(args.forget_class)))
 
         # ood_valid_dl.append(DataLoader(ood_valid_ds[cls], batch_size=batch_size, shuffle=True))
         ood_train_dl.append(DataLoader(Subset(ood_train_ds[cls], np.random.choice(range(len(ood_train_ds[cls])),
@@ -239,10 +239,10 @@ if __name__ == '__main__':
 
     kwargs = {
         "unlearned_model": net,
-        "retain_train_dataloader": retain_train_dl,  # 保留集
-        "forget_train_dataloader": forget_train_dl,  # 遗忘集
-        # "full_train_dataloader": full_train_dataloader,  # 保留集+遗忘集
-        "ood_dataloader": ood_train_dl,  # 分布外的数据，列表，可能有多个大类别
+        "retain_train_dataloader": retain_train_dl,  
+        "forget_train_dataloader": forget_train_dl,  
+        # "full_train_dataloader": full_train_dataloader,  
+        "ood_dataloader": ood_train_dl,  
         # "valid_poisonedloader": valid_poisonedloader,
         "rest_retain_dataloader": rest_retain_train_dl,
         "dampening_constant": 1,
