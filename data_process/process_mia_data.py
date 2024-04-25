@@ -23,26 +23,12 @@ def view_mia_results(lognames, mia_path):
 
     indic_index = 2
     plt.figure(figsize=(5.1, 4.5))
-
-    # colors = ['deepskyblue',
-    #           'orange',
-    #           'seagreen',
-    #           'tomato',
-    #           'violet',
-    #           'grey']
     colors = ['#619CD9', '#9A9AF8', '#F19E9C', '#EF7F51', '#78D3AC', '#9355B0']
 
     trajectory = mia_results[0][:, indic_index]*100
-    # window_size = 5
-    # trajectory = np.convolve(trajectory, np.ones(window_size) / window_size, mode='valid')
-
+    
     plt.plot(trajectory, '-', marker='.', label='forget_dataset', color=colors[0])
-    up_bar = trajectory + [random.uniform(1, 5) for _ in range(len(trajectory))]
-    low_bar = trajectory - [random.uniform(1, 5) for _ in range(len(trajectory))]
-    low_bar = [max(0, num) for num in low_bar]
-    plt.fill_between(range(len(trajectory)), low_bar, up_bar, color=colors[0], alpha=0.1)#color=colors[0],
-
-    #random_float_list = [random.uniform(1, 5) for _ in range(10)]
+    
     for i in range(len(mia_results) - 1):
         trajectory = mia_results[i + 1][:, indic_index]*100.
         window_size = 5
@@ -50,10 +36,7 @@ def view_mia_results(lognames, mia_path):
 
         plt.plot(trajectory, '-', marker='.',
                  label='ood_dataset' + str(i + 1), color=colors[i+1])
-        up_bar = trajectory + [random.uniform(1.5, 3) for _ in range(len(trajectory))]
-        low_bar = trajectory - [random.uniform(2, 5) for _ in range(len(trajectory))]
-        low_bar = [max(0, num) for num in low_bar]
-        plt.fill_between(range(len(trajectory)), low_bar, up_bar, color=colors[i+1], alpha=0.1)
+
     plt.ylabel('training acc/%')
     plt.xlabel('training steps')
     plt.ylim([0, 100])
