@@ -138,7 +138,7 @@ def main(args):
     ood_valid_ds = {}
     ood_train_ds = {}
     ood_valid_dl = []
-    ood_train_dl = []  # 存不同类别的分布外数据的dataloader
+    ood_train_dl = []
     for cls in config.ood_classes:
         ood_valid_ds[cls] = []
         ood_train_ds[cls] = []
