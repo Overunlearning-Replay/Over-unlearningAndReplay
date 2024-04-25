@@ -13,19 +13,19 @@ def accuracy(outputs, labels):
 
 
 def training_step(model, batch, device):
-    images, labels, clabels = batch
-    images, clabels = images.to(device), clabels.to(device)
+    images, labels = batch
+    images, labels = images.to(device), labels.to(device)
     out = model(images)  # Generate predictions
-    loss = F.cross_entropy(out, clabels)  # Calculate loss
+    loss = F.cross_entropy(out, labels)  # Calculate loss
     return loss
 
 
 def validation_step(model, batch, device):
-    images, labels, clabels = batch   # labels 100, clabels 20
-    images, clabels = images.to(device), clabels.to(device)
+    images, labels = batch
+    images, labels = images.to(device), labels.to(device)
     out = model(images)  # Generate predictions
-    loss = F.cross_entropy(out, clabels)  # Calculate loss
-    acc = accuracy(out, clabels)  # Calculate accuracy
+    loss = F.cross_entropy(out, labels)  # Calculate loss
+    acc = accuracy(out, labels)  # Calculate accuracy
     return {"Loss": loss.detach(), "Acc": acc}
 
 
@@ -49,7 +49,7 @@ def epoch_end(model, epoch, result):
     )
 
 @torch.no_grad()
-def evaluate(model, val_loader, device):
+def evaluate_gtsrb(model, val_loader, device):
     model.eval()
     outputs = [validation_step(model, batch, device) for batch in val_loader]
     return validation_epoch_end(model, outputs)
@@ -59,14 +59,9 @@ def get_lr(optimizer):
     for param_group in optimizer.param_groups:
         return param_group["lr"]
 
-def l1_regularization(model):
-    params_vec = []
-    for param in model.parameters():
-        params_vec.append(param.view(-1))
-    return torch.linalg.norm(torch.cat(params_vec), ord=1)
 
-def fit_one_cycle(
-    epochs, model, train_loader, val_loader, device, lr=0.01, milestones=None, mask=None, l1=False
+def fit_one_cycle_gtsrb(
+    epochs, model, train_loader, val_loader, device, forget_loader=None, lr=0.01, milestones=None, mask=None
 ):
     torch.cuda.empty_cache()
     history = []
@@ -85,10 +80,8 @@ def fit_one_cycle(
         model.train()
         train_losses = []
         lrs = []
-        for batch in train_loader:
+        for idx, batch in enumerate(train_loader):
             loss = training_step(model, batch, device)
-            if l1:
-                loss += (2e-5)*l1_regularization(model)
             train_losses.append(loss)
             loss.backward()
 
@@ -106,8 +99,18 @@ def fit_one_cycle(
             if epoch <= 1 and milestones:
                 warmup_scheduler.step()
 
+            if idx % 10==0:
+                with torch.no_grad():
+                    model.eval()
+                    print(f"Epoch[{epoch}]:", "Retain Dataset Acc",
+                          evaluate_gtsrb(model, val_loader, next(model.parameters()).device), ",Forget Dataset Acc",
+                          evaluate_gtsrb(model, forget_loader, next(model.parameters()).device))
+                    forget_acc = evaluate_gtsrb(model, forget_loader, next(model.parameters()).device)["Acc"]
+                    if forget_acc < 1:
+                        return
+
         # Validation phase
-        result = evaluate(model, val_loader, device)
+        result = evaluate_gtsrb(model, val_loader, device)
         result["train_loss"] = torch.stack(train_losses).mean().item()
         result["lrs"] = lrs
         epoch_end(model, epoch, result)
@@ -136,11 +139,11 @@ def build_retain_sets_in_unlearning(classwise_train, classwise_test, num_classes
 
     for ordered_cls, cls in enumerate(retain_class):
         if ordered_cls !=index_of_forget_class:
-            for img, label, clabel in classwise_test[cls]:  # label and coarse label
-                retain_valid.append((img, label, ordered_cls))  # ordered_clss
+            for img, label in classwise_test[cls]:  # label and coarse label
+                retain_valid.append((img, ordered_cls))  # ordered_clss
 
-            for img, label, clabel in classwise_train[cls]:
-                retain_train.append((img, label, ordered_cls))
+            for img, label in classwise_train[cls]:
+                retain_train.append((img, ordered_cls))
 
     return (retain_train, retain_valid)
 
@@ -165,22 +168,44 @@ def build_retain_sets_in_unlearning_gtsrb(classwise_train, classwise_test, num_c
 
     return (retain_train, retain_valid)
 
-def get_classwise_ds(ds, num_classes):
-    classwise_ds = {}
-    for i in range(num_classes):
-        classwise_ds[i] = []
+def fit_one_unlearning_cycle_gtsrb(epochs, model, train_loader, val_loader, lr, device, forget_loader=False, mask=None, dataname='GTSRB'):
+    history = []
 
-    for img, label, clabel in ds:
-        # print("label", label, "clabel, ", clabel)
-        classwise_ds[clabel].append((img, label, clabel))
-    return classwise_ds
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
-def get_classwise_ds_gtsrb(ds, num_classes):
-    classwise_ds = {}
-    for i in range(num_classes):
-        classwise_ds[i] = []
-    for img, label in ds:
-        classwise_ds[label].append((img, label))
-    return classwise_ds
+    for epoch in range(epochs):
+        model.train()
+        train_losses = []
+        lrs = []
+        for idx, batch in enumerate(train_loader):
+            loss = training_step(model, batch, device)
+            loss.backward()
+            train_losses.append(loss.detach().cpu())
 
+            if mask:
+                # print("amnesiac's mask is available!")
+                for name, param in model.named_parameters():
+                    if param.grad is not None:
+                        param.grad *= mask[name]
 
+            optimizer.step()
+            optimizer.zero_grad()
+
+            lrs.append(get_lr(optimizer))
+
+            if idx % 10 == 0 and forget_loader is not None:
+                with torch.no_grad():
+                    model.eval()
+                    print(f"Epoch[{epoch}]:", "Retain Dataset Acc",
+                          evaluate_gtsrb(model, val_loader, next(model.parameters()).device), ",Forget Dataset Acc",
+                          evaluate_gtsrb(model, forget_loader, next(model.parameters()).device))
+                    forget_acc = evaluate_gtsrb(model, forget_loader, next(model.parameters()).device)["Acc"]
+                    if forget_acc < 1:
+                        return
+
+        result = evaluate_gtsrb(model, val_loader, device)
+        result["train_loss"] = torch.stack(train_losses).mean()
+        result["lrs"] = lrs
+        epoch_end(model, epoch, result)
+        history.append(result)
+    return history
