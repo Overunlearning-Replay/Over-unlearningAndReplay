@@ -178,10 +178,10 @@ if __name__ == '__main__':
         ood_train_ds[cls] = []
 
         for img, label, clabel in classwise_test[cls]:
-            ood_valid_ds[cls].append((img, label, int(args.forget_class)))  # 分布外的数据默认为遗忘类
+            ood_valid_ds[cls].append((img, label, int(args.forget_class)))
 
         for img, label, clabel in classwise_train[cls]:
-            ood_train_ds[cls].append((img, label, int(args.forget_class)))  # 分布外的数据默认为遗忘类
+            ood_train_ds[cls].append((img, label, int(args.forget_class)))
 
         # ood_valid_dl.append(DataLoader(ood_valid_ds[cls], batch_size=batch_size, shuffle=True))
         ood_train_dl.append(DataLoader(Subset(ood_train_ds[cls], np.random.choice(range(len(ood_train_ds[cls])),
@@ -214,13 +214,6 @@ if __name__ == '__main__':
                                                                                    percent=args.unlearn_data_percent))
 
     #where the unlearned model is
-    # checkpoint_path_folder = os.path.join(config.CHECKPOINT_PATH,
-    #                                "{unlearning_scenarios}".format(unlearning_scenarios="forget_full_class_main"),
-    #                                "{net}-{dataset}-{classes}".format(net=args.net, dataset=args.dataset, classes=args.classes),
-    #                                "{task}".format(task="unlearning"),
-    #                                "{unlearning_method}-{para1}-{para2}".format(unlearning_method=args.method,
-    #                                                                             para1=args.para1,
-    #                                                                             para2=args.para2))
     checkpoint_path_folder = os.path.join(config.CHECKPOINT_PATH,
                                           "{scenario}".format(scenario="model_extraction"),
                                           "{dataset}-{unlearning}".format(dataset=args.dataset, unlearning=args.method))
@@ -240,10 +233,10 @@ if __name__ == '__main__':
 
     kwargs = {
         "unlearned_model": net,
-        "retain_train_dataloader": retain_train_dl,  # 保留集
-        "forget_train_dataloader": forget_train_dl,  # 遗忘集
-        # "full_train_dataloader": full_train_dataloader,  # 保留集+遗忘集
-        "ood_dataloader": ood_train_dl,  # 分布外的数据，列表，可能有多个大类别
+        "retain_train_dataloader": retain_train_dl,
+        "forget_train_dataloader": forget_train_dl,
+        # "full_train_dataloader": full_train_dataloader,
+        "ood_dataloader": ood_train_dl, 
         # "valid_poisonedloader": valid_poisonedloader,
         "rest_retain_dataloader": rest_retain_train_dl,
         "dampening_constant": 1,
