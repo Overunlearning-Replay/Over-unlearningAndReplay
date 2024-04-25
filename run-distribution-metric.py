@@ -16,7 +16,7 @@ dataset = 'Cifar20'
 n_classes = '15'
 forget_class ='4'
 
-masked = config.CHECKPOINT_PATH+'/pretrain/ResNet18-Cifar20-15/best.pth'
+pretrain_path = config.CHECKPOINT_PATH+'/pretrain/ResNet18-Cifar20-15/best.pth'
 
 #feature visualization
 python_file ="feature_visualization_metric_main.py"
@@ -28,6 +28,6 @@ for mu_method, para1, para2 in mu_method_list:
     subprocess.call(["python", python_file, '-net', net,
                      '-dataset', dataset, '-classes', n_classes,
                      '-forget_class', forget_class, '-method', mu_method,
-                     '-weight_path', masked, '-seed', seed,
+                     '-weight_path', pretrain_path, '-seed', seed,
                      "--para1", para1, "--para2", para2])
     time.sleep(delay_seconds)
