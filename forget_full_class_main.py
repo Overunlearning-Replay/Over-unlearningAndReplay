@@ -1,10 +1,5 @@
 #!/bin/python3.8
 
-"""
-This file is used to collect all arguments for the experiment, prepare the dataloaders, call the method for forgetting, and gather/log the metrics.
-Methods are executed in the strategies file.
-"""
-
 import random
 import os
 
