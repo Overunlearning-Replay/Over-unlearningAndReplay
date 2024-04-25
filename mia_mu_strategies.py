@@ -35,10 +35,6 @@ def mia_mu_relearning(unlearned_model, forget_train_dataloader,
 
     unlearned_model = unlearned_model.to(device)
 
-    # get_metric_scores(unlearned_model, unlearning_teacher, retain_train_dataloader,
-    #                   forget_train_dataloader, valid_dataloader,
-    #                   valid_poisonedloader, device)
-    # 定义损失函数和优化器
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(unlearned_model.parameters(), lr=float(relearning_lr), momentum=0.9)#
 
@@ -67,25 +63,6 @@ def mia_mu_relearning(unlearned_model, forget_train_dataloader,
             loss = criterion(outputs, targets)
             loss.backward()
             optimizer.step()
-
-            # total_loss += loss.item()
-            # _, predicted = outputs.max(1)
-            # total += targets[:args.b].size(0)
-            # correct += predicted[:args.b].eq(targets[:args.b]).sum().item()
-            #
-            # if batch_idx % 10 == 0:
-            #     avg_loss = total_loss / 10
-            #     accuracy = correct / total
-            #     print("[epoch]:", "{:.2f}".format(epoch + (batch_idx + 1) / total_batch), ", avg_loss:",
-            #           "{:.6f}".format(avg_loss), ", training_acc:", "{:.4f}".format(accuracy))
-            #     with open(logfile, 'a+') as f:
-            #         cols = ["{:.2f}".format(epoch + (batch_idx + 1) / total_batch),
-            #                 "{:.6f}".format(avg_loss),
-            #                 "{:.4f}".format(accuracy)]
-            #         f.write('\t'.join([str(c) for c in cols]) + '\n')
-            #     total_loss = 0.0
-            #     correct = 0
-            #     total = 0
 
             model.eval()
             for inputs, _, targets in dataloader:
@@ -116,12 +93,10 @@ def mia_mu_relearning(unlearned_model, forget_train_dataloader,
     epochs = 1
     unlearned_model.load_state_dict(torch.load(weight_path))
     for epoch in range(epochs):
-        # 训练第一个数据加载器
         relearn(unlearned_model, forget_train_dataloader, epoch, osp.join(mia_path, 'log_forget_train_dataloader.tsv'))
 
     unlearned_model.load_state_dict(torch.load(weight_path))
     for epoch in range(epochs):
-        # 训练第三个数据加载器
         if isinstance(ood_dataloader, list):
             for i in range(len(ood_dataloader)):
                 relearn(unlearned_model, ood_dataloader[i], epoch, osp.join(mia_path, 'log_ood_dataloader_'+str(i)+'.tsv'))
