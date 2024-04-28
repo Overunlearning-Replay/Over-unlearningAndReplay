@@ -46,9 +46,9 @@ To initiate the Reminiscence Attack, execute `run.py` with the same parameters a
 
 ### 5. Optimization Strategies
 
-- **L1 regularization**: Add `l1_regularization` to the loss term. This parameter is defined in `forget_full_class_strategies.py`.
-- **L2 regularization**: Add `l2_penalty` to the loss term. This parameter is also defined in `forget_full_class_strategies.py`.
-- **SalUn**: This requires three steps:
+- [**L1 regularization**](https://github.com/OPTML-Group/Unlearn-Sparse): Add `l1_regularization` to the loss term. This parameter is defined in `forget_full_class_strategies.py`.
+- [**L2 regularization**](https://github.com/cleverhans-lab/unrolling-sgd): Add `l2_penalty` to the loss term. This parameter is also defined in `forget_full_class_strategies.py`.
+- [**SalUn**](https://github.com/OPTML-Group/Unlearn-Saliency): This requires three steps:
   1. First, generate masks by running `python_file = "saliency_mu\\generate_mask.py"` in `run.py`, specifying `masked_save_dir`.
   2. Then, pass `masked_save_dir` into the `--mask_path` parameter of the `forget_full_class_main_{dataset}.py` file.
   3. If `mask_path` is not None, SalUn strategies will be enabled, as already integrated in the code.
