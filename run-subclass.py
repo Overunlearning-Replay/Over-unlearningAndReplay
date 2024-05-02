@@ -18,15 +18,8 @@ n_classes = '20'
 # forget_class_list = ['4', '55', '72', '95']
 all_class_list = ['4', '30', '55', '72', '95']
 for i in all_class_list:
-    # config.sub_ood_classes = [i]
     forget_class_list = list(set(all_class_list) - set([i]))
     #pretrain_model
-    # python_file = 'pretrain_model_cifar20_sublabel.py'
-    # subprocess.call(["python", python_file, '--sub_ood_class', i])
-    # time.sleep(delay_seconds)
-
-    # masked = config.CHECKPOINT_PATH+'/pretrain/ResNet18-Cifar20-15/best.pth' ## masked = config.CHECKPOINT_PATH+'/pretrain_sparsity/ResNet18-Cifar19-19/30-best.pth'
-    # masked = config.CHECKPOINT_PATH+'/pretrain/ResNet18-Cifar20-20/best.pth'
     masked = config.CHECKPOINT_PATH+f'/pretrain/ResNet18-Cifar20-20-ood{i}/best.pth'
 
     # machine unlearning baseline
@@ -64,24 +57,4 @@ for i in all_class_list:
                              '--relearning_lr', relearning_lr, '--sub_ood_class', i])
             time.sleep(delay_seconds)
 
-# for mu_method in mu_method_list:
-#     for para1 in para1_list:
-#         for para2 in para2_list:
-#             subprocess.call(["python", python_file, '-net', net,
-#                              '-dataset', dataset, '-classes', n_classes,
-#                              '-method', mu_method, '--forget_class', forget_class,
-#                              '-weight_path', masked,
-#                              '-seed', seed, "--num_ood_dataset", num_ood_dataset,
-#                              '--unlearn_data_percent', unlearn_data_percent, '--para1', para1, '--para2', para2,
-#                              '--relearning_lr', relearning_lr])
-#             time.sleep(delay_seconds)
-
-# # #feature visualization
-# python_file ="feature_visualization_main.py"
-# for mu_method in mu_method_list:
-#     subprocess.call(["python", python_file, '-net', net,
-#                      '-dataset', dataset, '-classes', n_classes,
-#                      '-method', mu_method, '-forget_class', forget_class,
-#                      '-weight_path', masked, '-seed', seed])  # , '--masked_path', masked_save_dir
-#     time.sleep(delay_seconds)
 
