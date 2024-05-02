@@ -27,7 +27,7 @@ pretrain_path = config.CHECKPOINT_PATH+'/pretrain/ResNet18-Cifar20-15/best.pth'
 # time.sleep(delay_seconds)
 
 '''machine unlearning baseline'''
-python_file = "forget_full_class_main_cifar15.py"
+python_file = "forget_full_class_main_cifar20.py"
 mu_method_list = [["basline", "0", "0"], ["retrain", "0.01", "40"],
                   ["negative_grad", "0.01", "2"], ["negative_grad_our", "0.01", "2"],
                   ["amnesiac", "0.0001", "3"], ["amnesiac_our", "0.0025", "0"],
@@ -59,7 +59,7 @@ for mu_method, para1, para2 in mu_method_list:
 # relearning mia attack masked = config.CHECKPOINT_PATH+'/model_extraction/Cifar20/cifar_dfme.pth.tar'
 
 '''reminiscence attack'''
-python_file = "mia_on_mu_main_cifar15_fullclass.py"
+python_file = "mia_on_mu_main_cifar20_fullclass.py"
 num_ood_dataset = "5"
 unlearn_data_percent = "0.03"
 lr_list = ['0.05', '0.10']
@@ -73,15 +73,3 @@ for mu_method, para1, para2 in mu_method_list:
                          '--unlearn_data_percent', unlearn_data_percent, '--para1', para1, '--para2', para2,
                          '--relearning_lr', lr])
         time.sleep(delay_seconds)
-
-
-'''feature visualization'''
-# python_file ="feature_visualization_main.py"
-# mu_method_list = [["negative_grad_defence", "0.009", "0"]]
-# for mu_method, para1, para2 in mu_method_list:
-#     subprocess.call(["python", python_file, '-net', net,
-#                      '-dataset', dataset, '-classes', n_classes,
-#                      '-method', mu_method, '-forget_class', forget_class,
-#                      '-weight_path', pretrain_path, '-seed', seed,
-#                      '--para1', para1, '--para2', para2])
-#     time.sleep(delay_seconds)
