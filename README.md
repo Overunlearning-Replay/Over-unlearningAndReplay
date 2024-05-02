@@ -29,6 +29,10 @@ Post-pretraining, execute unlearning algorithms by running `run.py` with the fol
 - `pretrained_model_path`: Path to the pretrained model.
 - `mu_method_list`: the configuration for recommended unlearning algorithms and parameters.
 
+This project includes Python scripts designed for conducting machine unlearning under different scenarios. 
+
+The `python file` are named following the pattern `forget_{full_class/subclass}_main_{dataset}.py`. Select the appropriate script according to the specifics of your experiment.
+
 **Use `forget_full_class_main_{dataset}.py` for a complete class unlearning session.**
 
 - **Standard Algorithms**: Use the standard method names (e.g., `Wfisher`).
@@ -42,8 +46,23 @@ Analyze the distribution of unlearned models by running `run-distribution-metric
 
 ### 4. Reminiscence Attack
 
-To initiate the Reminiscence Attack, execute `run.py` with the same parameters as in the unlearning phase but change the `python_file` to `mia_on_mu_main_{dataset}_fullclass.py`.
+### White-Box Scenario
 
+To perform the Reminiscence Attack in a white-box scenario:
+
+1. Run the script `run.py` with the same parameters used in the unlearning phase.
+2. Change the `python_file` parameter to `mia_on_mu_main_{dataset}_{fullclass/subclass}.py`.
+
+### Black-Box Scenario
+
+To perform the Reminiscence Attack in a black-box scenario:
+
+1. Initially, execute a Data-Free Model Extraction (DFME) attack using the script `dfme_attack.py` to obtain a copied model.
+2. For the Reminiscence Attack on the copied model:
+   - Set `python_file` parameter to `mia_on_mu_main_{dataset}_{fullclass/subclass}.py` in `run.py`.
+   - Update the `checkpoint_path` in the script to point to the copied model's checkpoint.
+   - Alternatively, use the `python_file` named with a `blackbox` suffix that automatically configures the necessary parameters.
+  
 ### 5. Optimization Strategies
 
 - [**L1 regularization**](https://github.com/OPTML-Group/Unlearn-Sparse): Add `l1_regularization` to the loss term. This parameter is defined in `forget_full_class_strategies.py`.
