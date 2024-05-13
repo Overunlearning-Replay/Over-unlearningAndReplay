@@ -9,7 +9,8 @@ import torch
 from torchvision.models import resnet18
 from transformers import ViTModel, ViTFeatureExtractor
 from resnet import ResNet, BasicBlock, BottleNeck
-
+from wide_resnet import WideResNet
+from resnet_split import *
 
 def ResNet18(num_classes):
     return ResNet(BasicBlock, [2, 2, 2, 2], num_classes=num_classes)
@@ -17,6 +18,15 @@ def ResNet18(num_classes):
 def ResNet50(num_classes):
     """return a ResNet 50 object"""
     return ResNet(BottleNeck, [3, 4, 6, 3], num_classes=num_classes)
+
+def wrn_28_2(num_classes=10, **kwargs):
+    model = WideResNet(depth=28, num_classes=num_classes, widen_factor=2, dropRate=0.0, **kwargs)
+    return model
+
+def wrn_40_2(num_classes=10, **kwargs):
+    model = WideResNet(depth=40, num_classes=num_classes, widen_factor=2, dropRate=0.0, **kwargs)
+    return model
+
 
 class Identity(nn.Module):
     def __init__(self):
