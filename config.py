@@ -9,8 +9,9 @@ from datetime import datetime
 CHECKPOINT_PATH = "log_files\model"
 
 forget_class = [0]
-ood_classes_shadow = [4, 12, 16, 17, 18]
-ood_classes = [12, 16, 17, 18, 19]#np.random.choice(np.setdiff1d(np.arange(0, 19), forget_class), 5, replace=False)
+ood_classes = [4, 12, 16, 17, 18, 19]#np.random.choice(np.setdiff1d(np.arange(0, 19), forget_class), 5, replace=False)
+# ood_classes_gtsrb = [9, 10, 11] #the first batch
+ood_classes_gtsrb = [40, 9, 11]# the second batch
 
 # Class correspondence as done in https://github.com/vikram2000b/bad-teaching-unlearning
 class_dict = {
@@ -59,11 +60,14 @@ Cifar19_MILESTONES = [15, 30, 35]
 Cifar15_EPOCHS = 40
 Cifar15_MILESTONES = [15, 30, 35]
 
+Imagenet64_EPOCHS = 200
+Imagenet64_MILESTONES = [120, 180, 250]
+
 Cifar100_EPOCHS = 200
 Cifar100_MILESTONES = [60, 120, 160]
 
-GTSRB_EPOCHS = 40
-GTSRB_MILESTONES = [15, 30, 35]
+GTSRB_EPOCHS = 50
+GTSRB_MILESTONES = [30, 35]
 
 Cifar10_ViT_EPOCHS = 8
 Cifar10_ViT_MILESTONES = [7]
@@ -76,6 +80,9 @@ Cifar19_ViT_MILESTONES = [8]
 
 Cifar100_ViT_EPOCHS = 8
 Cifar100_ViT_MILESTONES = [7]
+
+Imagenet64_ViT_EPOCHS = 8
+Imagenet64_ViT_MILESTONES = [7]
 
 GTSRB_ViT_EPOCHS = 15
 GTSRB_ViT_MILESTONES = [12]
