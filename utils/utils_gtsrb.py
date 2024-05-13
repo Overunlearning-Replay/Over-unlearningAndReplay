@@ -24,10 +24,11 @@ def validation_step(model, batch, device):
     images, labels = batch
     images, labels = images.to(device), labels.to(device)
     out = model(images)  # Generate predictions
+    # print('out', out)
+    # print("labels", labels)
     loss = F.cross_entropy(out, labels)  # Calculate loss
     acc = accuracy(out, labels)  # Calculate accuracy
     return {"Loss": loss.detach(), "Acc": acc}
-
 
 def validation_epoch_end(model, outputs):
     batch_losses = [x["Loss"] for x in outputs]
@@ -53,7 +54,6 @@ def evaluate_gtsrb(model, val_loader, device):
     model.eval()
     outputs = [validation_step(model, batch, device) for batch in val_loader]
     return validation_epoch_end(model, outputs)
-
 
 def get_lr(optimizer):
     for param_group in optimizer.param_groups:
@@ -99,15 +99,15 @@ def fit_one_cycle_gtsrb(
             if epoch <= 1 and milestones:
                 warmup_scheduler.step()
 
-            if idx % 10==0:
-                with torch.no_grad():
-                    model.eval()
-                    print(f"Epoch[{epoch}]:", "Retain Dataset Acc",
-                          evaluate_gtsrb(model, val_loader, next(model.parameters()).device), ",Forget Dataset Acc",
-                          evaluate_gtsrb(model, forget_loader, next(model.parameters()).device))
-                    forget_acc = evaluate_gtsrb(model, forget_loader, next(model.parameters()).device)["Acc"]
-                    if forget_acc < 1:
-                        return
+            # if idx % 10==0:
+            #     with torch.no_grad():
+            #         model.eval()
+            #         print(f"Epoch[{epoch}]:", "Retain Dataset Acc",
+            #               evaluate_gtsrb(model, val_loader, next(model.parameters()).device), ",Forget Dataset Acc",
+            #               evaluate_gtsrb(model, forget_loader, next(model.parameters()).device))
+            #         forget_acc = evaluate_gtsrb(model, forget_loader, next(model.parameters()).device)["Acc"]
+            #         if forget_acc < 0.3:
+            #             return
 
         # Validation phase
         result = evaluate_gtsrb(model, val_loader, device)

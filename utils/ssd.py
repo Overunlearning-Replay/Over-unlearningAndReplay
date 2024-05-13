@@ -195,12 +195,9 @@ class ParameterPerturber:
         """
 
         with torch.no_grad():
-            for (n, p), (oimp_n, oimp), (fimp_n, fimp) in zip(self.model.named_parameters(), original_importance.items(),
-                                                              forget_importance.items(),):
+            for (n, p), (oimp_n, oimp), (fimp_n, fimp) in zip(self.model.named_parameters(), original_importance.items(), forget_importance.items(),):
                 # Synapse Selection with parameter alpha
                 oimp_norm = oimp.mul(self.selection_weighting)
-                # print("oimp_norm", oimp_norm)
-                # oimp_norm = -1
                 locations = torch.where(fimp > oimp_norm)
 
                 # Synapse Dampening with parameter lambda

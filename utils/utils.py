@@ -59,14 +59,9 @@ def get_lr(optimizer):
     for param_group in optimizer.param_groups:
         return param_group["lr"]
 
-def l1_regularization(model):
-    params_vec = []
-    for param in model.parameters():
-        params_vec.append(param.view(-1))
-    return torch.linalg.norm(torch.cat(params_vec), ord=1)
 
 def fit_one_cycle(
-    epochs, model, train_loader, val_loader, device, lr=0.01, milestones=None, mask=None, l1=False
+    epochs, model, train_loader, val_loader, device, lr=0.01, milestones=None, mask=None
 ):
     torch.cuda.empty_cache()
     history = []
@@ -87,8 +82,6 @@ def fit_one_cycle(
         lrs = []
         for batch in train_loader:
             loss = training_step(model, batch, device)
-            if l1:
-                loss += (2e-5)*l1_regularization(model)
             train_losses.append(loss)
             loss.backward()
 
@@ -156,7 +149,8 @@ def build_retain_sets_in_unlearning_gtsrb(classwise_train, classwise_test, num_c
     index_of_forget_class = retain_class.index(forget_class)
 
     for ordered_cls, cls in enumerate(retain_class):
-        if ordered_cls !=index_of_forget_class:
+        if ordered_cls != index_of_forget_class:
+            # print("ordered_cls", ordered_cls)
             for img, label in classwise_test[cls]:  # label and coarse label
                 retain_valid.append((img, ordered_cls))  # ordered_clss
 
@@ -180,7 +174,7 @@ def get_classwise_ds_gtsrb(ds, num_classes):
     for i in range(num_classes):
         classwise_ds[i] = []
     for img, label in ds:
-        classwise_ds[label].append((img, label))
+        classwise_ds[label].append((img, int(label)))
     return classwise_ds
 
 
