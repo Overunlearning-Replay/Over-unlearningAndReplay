@@ -21,7 +21,7 @@ pretrain_path = config.CHECKPOINT_PATH+'/pretrain/ResNet18-Cifar20-15/best.pth'
 #feature visualization
 python_file ="feature_visualization_metric_main.py"
 # mu_method_list = [["finetune", "0.015", "10"], ["FT_prune", "0.01", "10"], ["retrain", "0.01", "10"],
-#                   ["Wfisher", "50", "0"], ["Wfisher_our", "120", "0"], ["baseline", "0", "0"],
+#                   ["Woodfisher", "50", "0"], ["Woodfisher_our", "120", "0"], ["baseline", "0", "0"],
 #                   ["amnesiac_our", "0.0025", "5"], ["amnesiac", "0.0001", "3"]]
 mu_method_list= [["ssd_tuning_our", '0.005', '0.4']]
 for mu_method, para1, para2 in mu_method_list:
