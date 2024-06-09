@@ -66,19 +66,6 @@ parser.add_argument(
         type=str,
         default="finetune",
         nargs="?",
-        # choices=[
-        #     "baseline",
-        #     "retrain",
-        #     "finetune",
-        #     "blindspot",
-        #     "amnesiac",
-        #     "FisherForgetting",
-        #     'Wfisher',
-        #     'FT_prune',
-        #     'negative_grad',
-        #     'ssd_tuning',
-        #     'UNSIR'
-        # ],
         help="select unlearning method from choice set",
 )  # not to use: "UNSIR", "ssd_tuning"?
 
