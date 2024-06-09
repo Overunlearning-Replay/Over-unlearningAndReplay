@@ -24,11 +24,11 @@ for i in all_class_list:
 
     # machine unlearning baseline
     python_file = "forget_sub_class_main_cifar20.py"
-    mu_method_list = [["Wfisher", "105", "0"], ["amnesiac", "0.000025", "2"]]#[["negative_grad", "0.003", "1"]]  # [["amnesiac", "0.000025", "2"]]# ['retrain', '0', '0'] [[
-    # "finetune", "0.1", "15"], ["negative_grad", "0.005", "2"], ["amnesiac", "0.0001", "2"], ["Wfisher", "80", "0"]]
+    mu_method_list = [["Woodfisher", "105", "0"], ["amnesiac", "0.000025", "2"]]#[["negative_grad", "0.003", "1"]]  # [["amnesiac", "0.000025", "2"]]# ['retrain', '0', '0'] [[
+    # "finetune", "0.1", "15"], ["negative_grad", "0.005", "2"], ["amnesiac", "0.0001", "2"], ["Woodfisher", "80", "0"]]
     # [["negative_grad", "0.005", "2"], ["amnesiac", "0.0001", "2"], ["Wfisher", "80", "0"], ["finetune", "0.1", "15"]]
     # [['retrain', '0', '0']]
-    # ["retrain", "Wfisher", "finetune", "blindspot", "negative_grad"] ["finetune", '0.013', '10']
+    # ["retrain", "Wfisher", "finetune", "badteacher", "negative_grad"] ["finetune", '0.013', '10']
 
     for forget_class in forget_class_list:
         for mu_method, para1, para2 in mu_method_list:
