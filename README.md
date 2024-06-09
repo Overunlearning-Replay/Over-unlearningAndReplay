@@ -46,14 +46,14 @@ Analyze the distribution of unlearned models by running `run-distribution-metric
 
 ### 4. Reminiscence Attack
 
-### White-Box Scenario
+#### White-Box Scenario
 
 To perform the Reminiscence Attack in a white-box scenario:
 
 1. Run the script `run.py` with the same parameters used in the unlearning phase.
 2. Change the `python_file` parameter to `mia_on_mu_main_{dataset}_{fullclass/subclass}.py`.
 
-### Black-Box Scenario
+#### Black-Box Scenario
 
 To perform the Reminiscence Attack in a black-box scenario:
 
@@ -72,6 +72,11 @@ To perform the Reminiscence Attack in a black-box scenario:
   2. Then, pass `masked_save_dir` into the `--mask_path` parameter of the `forget_full_class_main_{dataset}.py` file.
   3. If `mask_path` is not None, SalUn strategies will be enabled, as already integrated in the code.
 
+### 6. Acknowledgments
 
+This project builds upon the outstanding work done in the following repositories:
 
+- [Selective Synaptic Dampening (SSD)](https://github.com/if-loops/selective-synaptic-dampening)
+
+We gratefully acknowledge the authors of the project for their significant contributions to the field and for making their code available to the community.
 
