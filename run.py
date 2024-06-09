@@ -28,11 +28,11 @@ pretrain_path = config.CHECKPOINT_PATH+'/pretrain/ResNet18-Cifar20-15/best.pth'
 
 '''machine unlearning baseline'''
 python_file = "forget_full_class_main_cifar20.py"
-mu_method_list = [["basline", "0", "0"], ["retrain", "0.01", "40"],
+mu_method_list = [["baseline", "0", "0"], ["retrain", "0.01", "40"],
                   ["negative_grad", "0.01", "2"], ["negative_grad_our", "0.01", "2"],
                   ["amnesiac", "0.0001", "3"], ["amnesiac_our", "0.0025", "0"],
-                  ["Wfisher", '50', '0'],
-                  ["blindspot", "0.0001", "3"], ["blindspot_our", "0.0001", "3"],
+                  ["Woodfisher", '50', '0'],
+                  ["badteacher", "0.0001", "3"], ["badteacher_our", "0.0001", "3"],
                   ["ssd_tuning", '1', '1'], ["ssd_tuning_our", '0.005', '0.4']]
 
 #for Wfisher_our, sparse pretrained model is necessary. Then, run
