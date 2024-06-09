@@ -98,7 +98,7 @@ def fit_one_unlearning_cycle(epochs, model, train_loader, val_loader, lr, device
     return history
 
 
-def blindspot_unlearner(
+def badteacher_unlearner(
     model,
     unlearning_teacher,
     full_trained_teacher,
