@@ -200,7 +200,7 @@ def finetune(
     )
 
 
-def blindspot(
+def badteacher(
     model,
     unlearning_teacher,
     retain_train_dl,
@@ -221,7 +221,7 @@ def blindspot(
     else:
         b_s = 256
 
-    blindspot_unlearner(
+    badteacher_unlearner(
         model=student_model,
         unlearning_teacher=unlearning_teacher,
         full_trained_teacher=model,
@@ -246,7 +246,7 @@ def blindspot(
         device,
     )
 
-def blindspot_with_prune(model, unlearning_teacher, retain_train_dl, retain_valid_dl, forget_train_dl, forget_valid_dl, valid_dl, device, **kwargs,):
+def badteacher_with_prune(model, unlearning_teacher, retain_train_dl, retain_valid_dl, forget_train_dl, forget_valid_dl, valid_dl, device, **kwargs,):
     student_model = deepcopy(model)
     KL_temperature = 1
     optimizer = torch.optim.Adam(student_model.parameters(), lr=0.0001) #lr=0.0001,
@@ -980,7 +980,7 @@ def woodfisher_im(model, train_dl, device, criterion, v):
             return k_vec
     return k_vec
 
-def Wfisher(
+def Woodfisher(
         model,
         unlearning_teacher,
         retain_train_dl,
