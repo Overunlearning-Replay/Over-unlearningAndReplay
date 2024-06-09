@@ -246,7 +246,7 @@ def calculate_overlap(Y, labels, target_label, save_path):
 
     return overlap.sum()
 
-def plot_tsne_visualization_results(reduced_features, forget_class=4, name='blindspot'):
+def plot_tsne_visualization_results(reduced_features, forget_class=4, name='badteacher'):
     retain_classes = list(set(range(20)) - set(config.ood_classes))
     # print("retain_classes", retain_classes)
     index_forget_class = retain_classes.index(forget_class)
