@@ -2,14 +2,47 @@
 
 Welcome to the official repository for the paper **"How to Forget Data without A Trace: Over-Unlearning and Replay Are All You Need"**. This research explores a critical vulnerability in class-wise approximate unlearning algorithms and introduces the **Reminiscence Attack**, targeting the membership privacy of unlearned data.
 
-## Overview
+## 0 Experiments Ressults
+
+The following are respectively the training trajectories of (1) **CelebA-ResNet18 experiments**, (2)**Cifar20-AlexNet experiments**, and (3)**Black-box ReA attacks assisted by Pool-Based MEA** involved in this project.
+
+### 1. CelebA Experiments
+   1.1 ***The ReA Trajectories When Comparing GA, GA(OUR), And Retraining Methods**
+<p align="center"> 
+   <img src="experiment_results/celeba-ga-model-compare-lr0.0001.jpeg" 
+      width="35%"></p>
+<p align="center"> <span>Figure 1: ReA Training Trajectories of GA, GA(OUR) and Retraining.</span> </p>
+   
+   1.2 ***The ReA trajectories When Comparing Unlearned Data and OOD Data***
+<p align="center"> 
+   <img src="experiment_results/celeba-ga-lr0.0001.jpeg" alt='GA' width="35%">
+   <img src="experiment_results/celeba-ga-our-lr0.001.jpeg" alt='GA(OUR)' width="35%">
+</p>
+<p align="center"> <span>Figure 2: ReA Training Trajectories of GA.</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+   <span>Figure 3: ReA Training Trajectories of GA(OUR).</span> </p>
+   
+### 2. Cifar20-Alexnet Experimnets
+2.1 ***The ReA trajectories When Comparing Unlearned Data and OOD Data***
+<p align="center"> 
+   <img src="experiment_results/alex-poi-lr0.01.jpeg" alt='Poi' width="35%">
+   <img src="experiment_results/alex-poi-our-lr0.01.jpeg" alt='Poi(OUR)' width="35%">
+</p>
+<p align="center"> <span>Figure 4: ReA Training Trajectories of Poi.</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+   <span>Figure 5: ReA Training Trajectories of Poi(OUR).</span> </p>
+
+### 3. Black-box ReA Assistaed with Pool-based Model Extraction Attacl (50K Query Buedgets) Experiments
+3.1 ***The ReA trajectories***
+<p align="center"> 
+   <img src="experiment_results/pool-based-mea-iu-lr0.2.jpeg" 
+      width="35%"></p>
+<p align="center"> <span>Figure 1: ReA Training Trajectories under Black-Box Scenarios. The unlearning method is IU. </span> </p>
+
+## Code Overview
 
 The provided codebase enables:
 1. **Estimation of distribution attributes** across various approximate unlearning models.
 2. **Implementation of the Reminiscence Attack** on models processed by approximate unlearning algorithms.
 3. **Execution of the Over-Unlearning and Replay framework** for these algorithms.
-
-## Usage Guide
 
 ### 1. Pretraining
 
