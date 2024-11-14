@@ -2,14 +2,14 @@
 
 Welcome to the official repository for the paper **"How to Forget Data without A Trace: Over-Unlearning and Replay Are All You Need"**. This research explores a critical vulnerability in class-wise approximate unlearning algorithms and introduces the **Reminiscence Attack**, targeting the membership privacy of unlearned data.
 
-## Code Overview
+## 1. Code Overview
 
 The provided codebase enables:
 1. **Estimation of distribution attributes** across various approximate unlearning models.
 2. **Implementation of the Reminiscence Attack** on models processed by approximate unlearning algorithms.
 3. **Execution of the Over-Unlearning and Replay framework** for these algorithms.
 
-### 1. Pretraining
+### (1). Pretraining
 
 **To train a normal model:**  
 Begin with pretraining a model using `pretrain_model_{dataset}.py`. 
@@ -17,7 +17,7 @@ Begin with pretraining a model using `pretrain_model_{dataset}.py`.
 **To train a sparse model:**  
 Modify the training loss function to incorporate an L1 regularization for sparsity. Exclude out-of-distribution (OOD) data by setting the `ood_classes` in `config.py`.
 
-### 2. Running Unlearning Algorithms
+### (2). Running Unlearning Algorithms
 
 Post-pretraining, execute unlearning algorithms by running `run.py` with the following specifications:
 - `dataset`: Options include `CIFAR20`, `CIFAR100`, `Imagenet64`.
@@ -38,11 +38,11 @@ The `python file` are named following the pattern `forget_{full_class/subclass}_
 
 Results are saved in the `./log_files` directory.
 
-### 3. Distribution Metrics Analysis
+### (3). Distribution Metrics Analysis
 
 Analyze the distribution of unlearned models by running `run-distribution-metric.py`. This script outputs various metrics such as Intra-class Variance, Silhouette Score, Overlap Score, KDE-estimated Overlap, and t-SNE visualizations.
 
-### 4. Reminiscence Attack
+### (4). Reminiscence Attack
 
 #### White-Box Scenario
 
@@ -61,7 +61,7 @@ To perform the Reminiscence Attack in a black-box scenario:
    - Update the `checkpoint_path` in the script to point to the copied model's checkpoint.
    - Alternatively, use the `python_file` named with a `blackbox` suffix that automatically configures the necessary parameters.
   
-### 5. Optimization Strategies
+### (5). Optimization Strategies
 
 - [**L1 regularization**](https://github.com/OPTML-Group/Unlearn-Sparse): Add `l1_regularization` to the loss term. This parameter is defined in `forget_full_class_strategies.py`.
 - [**L2 regularization**](https://github.com/cleverhans-lab/unrolling-sgd): Add `l2_penalty` to the loss term. This parameter is also defined in `forget_full_class_strategies.py`.
@@ -71,7 +71,7 @@ To perform the Reminiscence Attack in a black-box scenario:
   3. If `mask_path` is not None, SalUn strategies will be enabled, as already integrated in the code.
 
 
-### 6. Acknowledgments
+### (6). Acknowledgments
 
 This project builds upon the outstanding work done in the following repositories:
 
